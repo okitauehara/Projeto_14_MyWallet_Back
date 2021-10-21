@@ -9,6 +9,14 @@ const signUpSchema = joi.object(
     }
 );
 
+const signInSchema = joi.object(
+    {
+        email: joi.string().pattern(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).required(),
+        password: joi.string().required()
+    }
+);
+
 export {
-    signUpSchema
+    signUpSchema,
+    signInSchema
 }

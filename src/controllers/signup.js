@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import connection from '../database/database.js';
 import { signUpSchema } from '../schemas/schemas.js'
 
-async function postSignUp(req, res) {
+export default async function postSignUp(req, res) {
     const {
         name,
         email,
@@ -36,8 +36,4 @@ async function postSignUp(req, res) {
         console.log(error);
         res.sendStatus(500);
     }
-}
-
-export {
-    postSignUp
 }
