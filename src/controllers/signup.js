@@ -17,7 +17,7 @@ export default async function postSignUp(req, res) {
     }
 
     try {
-        const emailCheck = await connection.query('SELECT * from users WHERE email = $1', [email]);
+        const emailCheck = await connection.query('SELECT * from users WHERE email = $1;', [email]);
         if (emailCheck.rowCount !== 0) {
             return res.status(409).send('Email already in use')
         }
@@ -29,7 +29,7 @@ export default async function postSignUp(req, res) {
             (name, email, password)
         VALUES
             ($1, $2, $3)
-        `, [name, email, hash]);
+        ;`, [name, email, hash]);
 
         res.sendStatus(201)
     } catch (error) {

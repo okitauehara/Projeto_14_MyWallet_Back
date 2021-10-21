@@ -16,12 +16,14 @@ export default async function postSignIn(req, res) {
     }
 
     try {
-        const emailCheck = await connection.query('SELECT * from users WHERE email = $1', [email]);
+        const emailCheck = await connection.query('SELECT * from users WHERE email = $1;', [email]);
         if (emailCheck.rowCount === 0) {
             return res.status(401).send('Invalid e-mail');
         }
 
-        const passwordCheck = bcrypt.compareSync(password, emailCheck.rows[0].password);
+        const user = emailCheck.rows[0];
+
+        const passwordCheck = bcrypt.compareSync(password, user.password);
         if (!passwordCheck) {
             return res.status(401).send('Invalid password');
         }
@@ -33,9 +35,12 @@ export default async function postSignIn(req, res) {
             (user_id, token)
         VALUES
             ($1, $2)
-        `, [emailCheck.rows[0].id, token]);
+        ;`, [user.id, token]);
 
-        res.send({ token })
+        res.send({
+            name: user.name,
+            token: token
+        })
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
