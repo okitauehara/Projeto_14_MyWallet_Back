@@ -16,7 +16,16 @@ const signInSchema = joi.object(
     }
 );
 
+const transactionSchema = joi.object(
+    {
+        description: joi.string().required(),
+        value: joi.number().integer().required(),
+        type: joi.string().valid('earning', 'expense').required(),
+    }
+);
+
 export {
     signUpSchema,
-    signInSchema
+    signInSchema,
+    transactionSchema
 }
