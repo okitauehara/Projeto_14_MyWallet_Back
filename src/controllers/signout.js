@@ -1,6 +1,6 @@
 import connection from "../database/database.js";
 
-export default async function postSignOut(req, res) {
+export default async function deleteToken(req, res) {
     const authorization = req.headers.authorization;
     const token = authorization?.replace('Bearer ', '');
 

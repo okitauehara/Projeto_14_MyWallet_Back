@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import postSignUp from './controllers/signup.js';
 import postSignIn from './controllers/signin.js';
-import postSignOut from './controllers/signout.js';
+import deleteToken from './controllers/signout.js';
 import { getTransactions, postTransaction } from './controllers/transactions.js';
 
 const app = express();
@@ -14,7 +14,7 @@ app.post('/sign-up', postSignUp);
 
 app.post('/sign-in', postSignIn);
 
-app.post('/sign-out', postSignOut);
+app.delete('/sign-out', deleteToken);
 
 app.get('/transactions', getTransactions);
 
