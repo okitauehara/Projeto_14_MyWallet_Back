@@ -20,4 +20,4 @@ app.get('/transactions', getTransactions);
 
 app.post('/transactions', postTransaction);
 
-app.listen(4000, () => console.log('Listening on Port 4000'));
+export default app;

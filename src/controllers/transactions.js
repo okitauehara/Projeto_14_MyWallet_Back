@@ -60,6 +60,9 @@ async function postTransaction(req, res) {
         FROM sessions
         WHERE token = $1
         ;`, [token])
+        if (getUser.rowCount === 0) {
+            return res.sendStatus(404);
+        }
 
         const user = getUser.rows[0];
         const date = new Date();
