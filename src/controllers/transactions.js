@@ -21,6 +21,7 @@ async function getTransactions(req, res) {
         JOIN sessions
         ON records.user_id = sessions.user_id
         WHERE sessions.token = $1
+        ORDER BY date DESC
         ;`, [token]);
         
         result.rows = result.rows.map(record => ({
