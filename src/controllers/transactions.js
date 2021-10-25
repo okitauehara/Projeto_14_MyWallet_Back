@@ -82,6 +82,52 @@ async function postTransaction(req, res) {
     }
 }
 
+async function putTransaction(req, res) {
+    const authorization = req.headers.authorization;
+    const token = authorization?.replace('Bearer ', '');
+    const id = req.params.transactionId;
+    const {
+        description,
+        value,
+        type
+    } = req.body;
+
+    if (!token) {
+        return res.sendStatus(401);
+    }
+    
+    const { error } = transactionSchema.validate(req.body);
+
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+
+    try {
+        const checkRecord = await connection.query(`
+            SELECT *
+            FROM records
+            WHERE id = $1
+        ;`, [id])
+        if (checkRecord.rowCount === 0) {
+            return res.sendStatus(404);
+        }
+        
+        await connection.query(`
+            UPDATE records
+            SET
+                description = $1,
+                value = $2,
+                type = $3
+            WHERE id = $4
+        ;`, [description, value, type, id])
+
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+
 async function deleteTransaction(req, res) {
     const authorization = req.headers.authorization;
     const token = authorization?.replace('Bearer ', '');
@@ -117,5 +163,6 @@ async function deleteTransaction(req, res) {
 export {
     getTransactions,
     postTransaction,
+    putTransaction,
     deleteTransaction
 }
