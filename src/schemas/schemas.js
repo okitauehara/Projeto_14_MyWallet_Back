@@ -18,7 +18,7 @@ const signInSchema = joi.object(
 
 const transactionSchema = joi.object(
     {
-        description: joi.string().required(),
+        description: joi.string().min(3).required(),
         value: joi.number().integer().required(),
         type: joi.string().valid('earning', 'expense').required(),
     }
