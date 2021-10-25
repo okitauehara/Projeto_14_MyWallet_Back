@@ -29,6 +29,7 @@ async function getTransactions(req, res) {
             date: `${new Date(record.date).getDate()}/${String(new Date(record.date).getMonth()).padStart(2, '0')}`
         }));
 
+        console.log(result.status);
         res.send(result.rows);
     } catch (error) {
         console.log(error);
@@ -46,11 +47,10 @@ async function postTransaction(req, res) {
     } = req.body;
 
     if (!token) {
-        return res.sendStatus(401);
+        return res.status(401).send({ message: 'Missing token'});
     }
 
     const { error } = transactionSchema.validate(req.body);
-
     if (error) {
         return res.status(400).send(error.details[0].message);
     }
@@ -62,7 +62,7 @@ async function postTransaction(req, res) {
             WHERE token = $1
         ;`, [token])
         if (getUser.rowCount === 0) {
-            return res.sendStatus(404);
+            return res.status(404).send({ message: 'Invalid token'});
         }
 
         const user = getUser.rows[0];
@@ -75,7 +75,7 @@ async function postTransaction(req, res) {
                 ($1, $2, $3, $4, $5)
         ;`, [user.user_id, date, description, value, type]);
 
-        res.sendStatus(201);
+        res.status(201).send({ message: 'Created!'});
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -97,7 +97,6 @@ async function putTransaction(req, res) {
     }
     
     const { error } = transactionSchema.validate(req.body);
-
     if (error) {
         return res.status(400).send(error.details[0].message);
     }

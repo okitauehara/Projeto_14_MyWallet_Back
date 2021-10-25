@@ -22,6 +22,6 @@ app.post('/transactions', postTransaction);
 
 app.delete('/transactions/:transactionId', deleteTransaction);
 
-app.put('/transactions/:transactionId', putTransaction);
+app.put('/transactions/:transactionId', putTransaction);    
 
 export default app;

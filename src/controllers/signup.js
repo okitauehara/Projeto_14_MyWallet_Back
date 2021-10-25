@@ -11,7 +11,6 @@ export default async function postSignUp(req, res) {
     } = req.body;
 
     const { error } = signUpSchema.validate(req.body);
-
     if (error) {
         return res.status(400).send(error.details[0].message);
     }

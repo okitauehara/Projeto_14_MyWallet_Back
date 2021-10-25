@@ -10,7 +10,6 @@ export default async function postSignIn(req, res) {
     } = req.body;
 
     const { error } = signInSchema.validate(req.body);
-
     if (error) {
         return res.status(400).send(error.details[0].message);
     }
