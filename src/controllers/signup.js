@@ -25,10 +25,10 @@ export default async function postSignUp(req, res) {
         const hash = bcrypt.hashSync(password, 10);
 
         await connection.query(`
-        INSERT INTO users
-            (name, email, password)
-        VALUES
-            ($1, $2, $3)
+            INSERT INTO users
+                (name, email, password)
+            VALUES
+                ($1, $2, $3)
         ;`, [name, email, hash]);
 
         res.sendStatus(201)

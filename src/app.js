@@ -3,7 +3,7 @@ import cors from 'cors';
 import postSignUp from './controllers/signup.js';
 import postSignIn from './controllers/signin.js';
 import deleteToken from './controllers/signout.js';
-import { getTransactions, postTransaction } from './controllers/transactions.js';
+import { deleteTransaction, getTransactions, postTransaction } from './controllers/transactions.js';
 
 const app = express();
 
@@ -19,5 +19,7 @@ app.delete('/sign-out', deleteToken);
 app.get('/transactions', getTransactions);
 
 app.post('/transactions', postTransaction);
+
+app.delete('/transactions/:transactionId', deleteTransaction);
 
 export default app;

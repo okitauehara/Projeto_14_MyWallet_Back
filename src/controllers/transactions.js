@@ -11,17 +11,17 @@ async function getTransactions(req, res) {
 
     try {
         const result = await connection.query(`
-        SELECT 
-            records.id,
-            records.date,
-            records.description,
-            records.value,
-            records.type
-        FROM records
-        JOIN sessions
-        ON records.user_id = sessions.user_id
-        WHERE sessions.token = $1
-        ORDER BY date DESC
+            SELECT 
+                records.id,
+                records.date,
+                records.description,
+                records.value,
+                records.type
+            FROM records
+            JOIN sessions
+            ON records.user_id = sessions.user_id
+            WHERE sessions.token = $1
+            ORDER BY date DESC
         ;`, [token]);
         
         result.rows = result.rows.map(record => ({
@@ -57,9 +57,9 @@ async function postTransaction(req, res) {
 
     try {
         const getUser = await connection.query(`
-        SELECT *
-        FROM sessions
-        WHERE token = $1
+            SELECT *
+            FROM sessions
+            WHERE token = $1
         ;`, [token])
         if (getUser.rowCount === 0) {
             return res.sendStatus(404);
@@ -69,10 +69,10 @@ async function postTransaction(req, res) {
         const date = new Date();
 
         await connection.query(`
-        INSERT INTO records
-            (user_id, date, description, value, type)
-        VALUES
-            ($1, $2, $3, $4, $5)
+            INSERT INTO records
+                (user_id, date, description, value, type)
+            VALUES
+                ($1, $2, $3, $4, $5)
         ;`, [user.user_id, date, description, value, type]);
 
         res.sendStatus(201);
@@ -82,7 +82,40 @@ async function postTransaction(req, res) {
     }
 }
 
+async function deleteTransaction(req, res) {
+    const authorization = req.headers.authorization;
+    const token = authorization?.replace('Bearer ', '');
+    const id = req.params.transactionId;
+
+    if (!token) {
+        return res.sendStatus(401);
+    }
+    
+    try {
+        const checkRecord = await connection.query(`
+            SELECT *
+            FROM records
+            WHERE id = $1
+        ;`, [id])
+        if (checkRecord.rowCount === 0) {
+            return res.sendStatus(404);
+        }
+        
+        await connection.query(`
+            DELETE
+            FROM records
+            WHERE id = $1
+        ;`, [id])
+
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+
 export {
     getTransactions,
-    postTransaction
+    postTransaction,
+    deleteTransaction
 }

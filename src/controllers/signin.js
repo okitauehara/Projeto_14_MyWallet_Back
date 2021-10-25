@@ -31,10 +31,10 @@ export default async function postSignIn(req, res) {
         const token = uuid();
 
         await connection.query(`
-        INSERT INTO sessions
-            (user_id, token)
-        VALUES
-            ($1, $2)
+            INSERT INTO sessions
+                (user_id, token)
+            VALUES
+                ($1, $2)
         ;`, [user.id, token]);
 
         res.send({
