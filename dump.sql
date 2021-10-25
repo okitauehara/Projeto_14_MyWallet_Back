@@ -125,7 +125,17 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.records (id, user_id, date, description, value, type) FROM stdin;
-53	7	2021-10-25T14:59:22.835-03:00	Dinheiro Caiu do Bolso	2000	expense
+58	1	2021-10-25T15:28:25.756-03:00	Salário	500000	earning
+59	1	2021-10-25T15:28:45.491-03:00	Freelance	60000	earning
+60	1	2021-10-25T15:29:03.331-03:00	Almoço de segunda	2990	expense
+61	1	2021-10-25T15:29:21.879-03:00	Compras do supermercado	32770	expense
+62	1	2021-10-25T15:29:52.120-03:00	João estava devendo	5000	earning
+63	1	2021-10-25T15:30:23.044-03:00	Zé Delivery	3380	expense
+64	1	2021-10-25T15:30:49.363-03:00	Empréstimo para mãe	50000	expense
+65	1	2021-10-25T15:31:18.357-03:00	Contas do mês	35000	expense
+66	1	2021-10-25T15:31:46.689-03:00	Maria estava devendo	7000	earning
+67	1	2021-10-25T15:32:03.799-03:00	Primeira parcela do notebook	72000	expense
+68	7	2021-10-25T15:32:33.728-03:00	Salário	500000	earning
 \.
 
 
@@ -134,7 +144,6 @@ COPY public.records (id, user_id, date, description, value, type) FROM stdin;
 --
 
 COPY public.sessions (user_id, token) FROM stdin;
-7	d8ac79aa-2e78-4153-a04a-3ebd27f34421
 \.
 
 
@@ -152,7 +161,7 @@ COPY public.users (id, name, email, password) FROM stdin;
 -- Name: records_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.records_id_seq', 53, true);
+SELECT pg_catalog.setval('public.records_id_seq', 68, true);
 
 
 --
