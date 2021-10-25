@@ -18,7 +18,7 @@ export default async function postSignUp(req, res) {
     try {
         const emailCheck = await connection.query('SELECT * from users WHERE email = $1;', [email]);
         if (emailCheck.rowCount !== 0) {
-            return res.status(409).send('Email already in use')
+            return res.status(409).send({ message: 'Email already in use' })
         }
 
         const hash = bcrypt.hashSync(password, 10);
@@ -30,7 +30,7 @@ export default async function postSignUp(req, res) {
                 ($1, $2, $3)
         ;`, [name, email, hash]);
 
-        res.sendStatus(201)
+        res.status(201).send({ message: 'Created!' })
     } catch (error) {
         console.log(error);
         res.sendStatus(500);

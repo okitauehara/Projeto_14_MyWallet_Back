@@ -6,7 +6,7 @@ async function getTransactions(req, res) {
     const token = authorization?.replace('Bearer ', '');
 
     if (!token) {
-        return res.sendStatus(401);
+        return res.status(401).send({ message: 'Missing token'});
     }
 
     try {
@@ -29,7 +29,6 @@ async function getTransactions(req, res) {
             date: `${new Date(record.date).getDate()}/${String(new Date(record.date).getMonth()).padStart(2, '0')}`
         }));
 
-        console.log(result.status);
         res.send(result.rows);
     } catch (error) {
         console.log(error);
@@ -93,7 +92,7 @@ async function putTransaction(req, res) {
     } = req.body;
 
     if (!token) {
-        return res.sendStatus(401);
+        return res.status(401).send({ message: 'Missing token'});
     }
     
     const { error } = transactionSchema.validate(req.body);
@@ -108,7 +107,7 @@ async function putTransaction(req, res) {
             WHERE id = $1
         ;`, [id])
         if (checkRecord.rowCount === 0) {
-            return res.sendStatus(404);
+            return res.status(404).send({ message: 'Invalid token'});
         }
         
         await connection.query(`
@@ -120,7 +119,7 @@ async function putTransaction(req, res) {
             WHERE id = $4
         ;`, [description, value, type, id])
 
-        res.sendStatus(200);
+        res.status(200).send({ message: 'Successfull update!' });
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -133,7 +132,7 @@ async function deleteTransaction(req, res) {
     const id = req.params.transactionId;
 
     if (!token) {
-        return res.sendStatus(401);
+        return res.status(401).send({ message: 'Missing token'});
     }
     
     try {
@@ -143,7 +142,7 @@ async function deleteTransaction(req, res) {
             WHERE id = $1
         ;`, [id])
         if (checkRecord.rowCount === 0) {
-            return res.sendStatus(404);
+            return res.status(404).send({ message: 'Invalid token'});
         }
         
         await connection.query(`
@@ -152,7 +151,7 @@ async function deleteTransaction(req, res) {
             WHERE id = $1
         ;`, [id])
 
-        res.sendStatus(200);
+        res.status(200).send({ message: 'Deleted!' });
     } catch (error) {
         console.log(error);
         res.sendStatus(500);

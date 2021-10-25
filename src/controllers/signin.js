@@ -17,14 +17,14 @@ export default async function postSignIn(req, res) {
     try {
         const emailCheck = await connection.query('SELECT * from users WHERE email = $1;', [email]);
         if (emailCheck.rowCount === 0) {
-            return res.status(401).send('Invalid e-mail');
+            return res.status(401).send({ message: 'Invalid e-mail' });
         }
 
         const user = emailCheck.rows[0];
 
         const passwordCheck = bcrypt.compareSync(password, user.password);
         if (!passwordCheck) {
-            return res.status(401).send('Invalid password');
+            return res.status(401).send({ message: 'Invalid password' });
         }
 
         const token = uuid();

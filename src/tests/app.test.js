@@ -2,6 +2,9 @@ import app from "../app.js";
 import supertest from "supertest";
 import connection from "../database/database.js";
 
+// Para efetuar o teste corretamente é necessário ao menos um usuário criado e logado.
+// ATENÇÃO: após a execução do teste os registros serão deletados.
+
 afterAll(async () => {
     await connection.query('DELETE FROM records');
 });
@@ -25,7 +28,7 @@ describe('/POST transactions', () => {
     });
 
     it("return status 401 when headers don't have Bearer token", async () => {
-        
+
         const body = {
             description: "Salário",
             value: 500000,

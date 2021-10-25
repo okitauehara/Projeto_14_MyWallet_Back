@@ -5,13 +5,13 @@ export default async function deleteToken(req, res) {
     const token = authorization?.replace('Bearer ', '');
 
     if (!token) {
-        return res.sendStatus(401);
+        return res.status(401).send({ message: 'Missing token'});
     }
 
     try {
         await connection.query('DELETE FROM sessions WHERE token = $1', [token]);
 
-        res.sendStatus(200);
+        res.status(200).send({ message: 'Successfull logout!'});
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
