@@ -21,7 +21,7 @@ export default async function postSignIn(req, res) {
         }
 
         const user = emailCheck.rows[0];
-        const firstName = user.name.split(' ').splice(0, 1);
+        const firstName = user.name.split(' ').splice(0, 1)[0];
 
         const passwordCheck = bcrypt.compareSync(password, user.password);
         if (!passwordCheck) {
