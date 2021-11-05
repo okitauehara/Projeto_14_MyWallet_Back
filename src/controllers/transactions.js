@@ -26,7 +26,7 @@ async function getTransactions(req, res) {
         
         result.rows = result.rows.map(record => ({
             ...record,
-            date: `${String(new Date(record.date).getDate()).padStart(2, '0')}/${String(new Date(record.date).getMonth()).padStart(2, '0')}`
+            date: `${String(new Date(record.date).getDate()).padStart(2, '0')}/${String(new Date(record.date).getMonth() + 1).padStart(2, '0')}`
         }));
 
         res.send(result.rows);
