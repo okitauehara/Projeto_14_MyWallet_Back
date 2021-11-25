@@ -16,4 +16,14 @@ async function authenticate({ email, password }) {
   return ({ user, session });
 }
 
-export { authenticate };
+async function verifyUser({ name, email, password }) {
+  const emailCheck = await userRepository.findUserByEmail(email);
+  if (emailCheck) return null;
+
+  const hashPassword = bcrypt.hashSync(password, 10);
+
+  const result = await userRepository.createUser({ name, email, password: hashPassword });
+  return result;
+}
+
+export { authenticate, verifyUser };
