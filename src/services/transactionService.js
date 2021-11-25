@@ -21,9 +21,22 @@ async function postNewRecord({
   if (!getSession) return null;
 
   const recordData = await transactionRepository.insertNewRecordData({ description, value, type });
-  const newRecord = await transactionRepository.insertNewRecordId({ userId: getSession.user_id, recordId: recordData.id });
+  const result = await transactionRepository.insertNewRecordId({ userId: getSession.user_id, recordId: recordData.id });
 
-  return newRecord;
+  return result;
 }
 
-export { getRecords, postNewRecord };
+async function updateRecord({
+  transactionId, description, value, type,
+}) {
+  const getSession = await transactionRepository.findRecordById(transactionId);
+  if (!getSession) return null;
+
+  const result = await transactionRepository.updateRecord({
+    description, value, type, transactionId,
+  });
+
+  return result;
+}
+
+export { getRecords, postNewRecord, updateRecord };

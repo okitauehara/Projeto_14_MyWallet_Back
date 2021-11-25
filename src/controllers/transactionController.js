@@ -39,4 +39,30 @@ async function postTransaction(req, res) {
   }
 }
 
-export { getTransactions, postTransaction };
+async function putTransaction(req, res) {
+  const { transactionId } = req.params;
+  const {
+    description,
+    value,
+    type,
+  } = req.body;
+
+  const { error } = transactionSchema.validate(req.body);
+  if (error) {
+    return res.sendStatus(400);
+  }
+
+  try {
+    const result = await transactionService.updateRecord({
+      transactionId, description, value, type,
+    });
+    if (!result) return res.sendStatus(404);
+
+    return res.sendStatus(200);
+  } catch (err) {
+    console.log(`Error on Transactions: Unable to update transaction - ${err}`);
+    return res.sendStatus(500);
+  }
+}
+
+export { getTransactions, postTransaction, putTransaction };

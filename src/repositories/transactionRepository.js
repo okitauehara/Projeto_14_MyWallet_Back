@@ -31,7 +31,34 @@ async function insertNewRecordId({ userId, recordId }) {
       (user_id, record_id)
     VALUES
       ($1, $2)
-  `, [userId, recordId]);
+  ;`, [userId, recordId]);
 }
 
-export { findRecordsByToken, insertNewRecordData, insertNewRecordId };
+async function findRecordById(recordId) {
+  const result = await connection.query(`
+    SELECT * FROM records
+    WHERE id = $1
+  ;`, [recordId]);
+  return result.rows[0];
+}
+
+async function updateRecord({
+  description, value, type, transactionId,
+}) {
+  return connection.query(`
+    UPDATE records
+    SET
+      description = $1,
+      value = $2,
+      type = $3
+    WHERE id = $4
+  ;`, [description, value, type, transactionId]);
+}
+
+export {
+  findRecordsByToken,
+  insertNewRecordData,
+  insertNewRecordId,
+  findRecordById,
+  updateRecord,
+};

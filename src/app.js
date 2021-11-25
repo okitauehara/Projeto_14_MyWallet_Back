@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import * as userController from './controllers/userController.js';
 import {
-  deleteTransaction, putTransaction,
+  deleteTransaction,
 } from './controllers/transactions.js';
 import * as transactionController from './controllers/transactionController.js';
 import ensureAuth from './middlewares/ensureAuth.js';
@@ -20,6 +20,6 @@ app.delete('/sign-out', ensureAuth, userController.signOut);
 app.get('/transactions', transactionController.getTransactions);
 app.post('/transactions', transactionController.postTransaction);
 app.delete('/transactions/:transactionId', deleteTransaction);
-app.put('/transactions/:transactionId', putTransaction);
+app.put('/transactions/:transactionId', transactionController.putTransaction);
 
 export default app;
