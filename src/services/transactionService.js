@@ -34,4 +34,18 @@ async function updateRecord({
   return result;
 }
 
-export { getRecords, postNewRecord, updateRecord };
+async function deleteRecord(userId, transactionId) {
+  const getSession = await transactionRepository.findRecordById(transactionId);
+  if (!getSession) return null;
+
+  const result = await transactionRepository.deleteRecord({ userId, recordId: transactionId });
+
+  return result;
+}
+
+export {
+  getRecords,
+  postNewRecord,
+  updateRecord,
+  deleteRecord,
+};

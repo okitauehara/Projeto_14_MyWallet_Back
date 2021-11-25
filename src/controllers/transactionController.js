@@ -65,4 +65,24 @@ async function putTransaction(req, res) {
   }
 }
 
-export { getTransactions, postTransaction, putTransaction };
+async function deleteTransaction(req, res) {
+  const { session } = res.locals;
+  const { transactionId } = req.params;
+
+  try {
+    const result = await transactionService.deleteRecord(session.user_id, transactionId);
+    if (!result) return res.sendStatus(404);
+
+    return res.sendStatus(200);
+  } catch (err) {
+    console.log(`Error Transactions: Unable to delete transaction - ${err}`);
+    return res.sendStatus(500);
+  }
+}
+
+export {
+  getTransactions,
+  postTransaction,
+  putTransaction,
+  deleteTransaction,
+};

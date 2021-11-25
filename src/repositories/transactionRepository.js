@@ -61,10 +61,28 @@ async function updateRecord({
   ;`, [description, value, type, transactionId]);
 }
 
+async function deleteRecord({ userId, recordId }) {
+  await connection.query(`
+    DELETE
+    FROM users_records
+    WHERE user_id = $1
+      AND record_id = $2
+	;`, [userId, recordId]);
+
+  const result = await connection.query(`
+    DELETE
+    FROM records
+    WHERE id = $1
+  ;`, [recordId]);
+
+  return result;
+}
+
 export {
   findRecordsByToken,
   insertNewRecordData,
   insertNewRecordId,
   findRecordById,
   updateRecord,
+  deleteRecord,
 };
