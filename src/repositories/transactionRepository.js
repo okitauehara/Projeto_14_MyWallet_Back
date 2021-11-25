@@ -14,4 +14,24 @@ async function findRecordsByToken(token) {
   return result;
 }
 
-export { findRecordsByToken };
+async function insertNewRecordData({ description, value, type }) {
+  const result = await connection.query(`
+			INSERT INTO records
+				(description, value, type)
+			VALUES
+				($1, $2, $3)
+      RETURNING *
+		;`, [description, value, type]);
+  return result.rows[0];
+}
+
+async function insertNewRecordId({ userId, recordId }) {
+  return connection.query(`
+    INSERT INTO users_records
+      (user_id, record_id)
+    VALUES
+      ($1, $2)
+  `, [userId, recordId]);
+}
+
+export { findRecordsByToken, insertNewRecordData, insertNewRecordId };

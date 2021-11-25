@@ -1,4 +1,5 @@
 import * as transactionService from '../services/transactionService.js';
+import { transactionSchema } from '../schemas/schemas.js';
 
 async function getTransactions(req, res) {
   const { session } = res.locals;
@@ -14,4 +15,28 @@ async function getTransactions(req, res) {
   }
 }
 
-export { getTransactions };
+async function postTransaction(req, res) {
+  const { session } = res.locals;
+  const {
+    description,
+    value,
+    type,
+  } = req.body;
+
+  const { error } = transactionSchema.validate(req.body);
+  if (error) return res.sendStatus(400);
+
+  try {
+    const result = await transactionService.postNewRecord({
+      token: session.token, description, value, type,
+    });
+    if (!result) return res.sendStatus(404);
+
+    return res.sendStatus(201);
+  } catch (err) {
+    console.log(`Error on Transactions: Unable to post transaction - ${err}`);
+    return res.sendStatus(500);
+  }
+}
+
+export { getTransactions, postTransaction };
