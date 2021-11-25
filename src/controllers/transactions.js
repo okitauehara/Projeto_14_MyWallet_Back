@@ -11,16 +11,13 @@ async function getTransactions(req, res) {
 
   try {
     const result = await connection.query(`
-			SELECT 
-					records.id,
-					records.date,
-					records.description,
-					records.value,
-					records.type
-			FROM records
-			JOIN sessions
-			ON records.user_id = sessions.user_id
-			WHERE sessions.token = $1
+			SELECT records.*
+      FROM records
+      JOIN sessions
+        ON sessions.token = $1
+			JOIN users_records
+			  ON users_records.user_id = sessions.user_id
+      WHERE records.id = users_records.record_id
 			ORDER BY date DESC
 		;`, [token]);
 
