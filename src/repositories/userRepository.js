@@ -14,4 +14,9 @@ async function createUser({ name, email, password }) {
   ;`, [name, email, password]);
 }
 
-export { findUserByEmail, createUser };
+async function findUserById(userId) {
+  const result = await connection.query('SELECT * FROM users WHERE id = $1;', [userId]);
+  return result.rows[0];
+}
+
+export { findUserByEmail, createUser, findUserById };

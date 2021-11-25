@@ -1,5 +1,6 @@
 import { signInSchema, signUpSchema } from '../schemas/schemas.js';
 import * as userService from '../services/userService.js';
+import * as sessionService from '../services/sessionService.js';
 
 async function signIn(req, res) {
   const {
@@ -47,4 +48,18 @@ async function signUp(req, res) {
   }
 }
 
-export { signIn, signUp };
+async function signOut(req, res) {
+  const { session } = res.locals;
+
+  try {
+    const result = await sessionService.deleteSession(session.token);
+    if (!result) return res.sendStatus(400);
+
+    return res.sendStatus(200);
+  } catch (err) {
+    console.log(`Error on Sign Out: Unable to remove user - ${err}`);
+    return res.sendStatus(500);
+  }
+}
+
+export { signIn, signUp, signOut };
