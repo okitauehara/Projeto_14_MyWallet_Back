@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import supertest from 'supertest';
-import app from '../app.js';
-import connection from '../database/database.js';
+import app from '../src/app.js';
+import connection from '../src/database/database.js';
 
 // Para efetuar o teste corretamente é necessário ao menos um usuário criado e logado.
 // ATENÇÃO: após a execução do teste os registros serão deletados.
