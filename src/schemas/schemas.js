@@ -1,31 +1,30 @@
 import joi from 'joi';
 
 const signUpSchema = joi.object(
-    {
-        name: joi.string().min(3).required(),
-        email: joi.string().pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).required(),
-        password: joi.string().min(8).required(),
-        confirmation: joi.string().required().valid(joi.ref('password'))
-    }
+  {
+    name: joi.string().min(3).required(),
+    email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+    password: joi.string().min(8).required(),
+  },
 );
 
 const signInSchema = joi.object(
-    {
-        email: joi.string().pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).required(),
-        password: joi.string().required()
-    }
+  {
+    email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+    password: joi.string().required(),
+  },
 );
 
 const transactionSchema = joi.object(
-    {
-        description: joi.string().min(3).required(),
-        value: joi.number().integer().required(),
-        type: joi.string().valid('earning', 'expense').required(),
-    }
+  {
+    description: joi.string().min(3).required(),
+    value: joi.number().integer().required(),
+    type: joi.string().valid('earning', 'expense').required(),
+  },
 );
 
 export {
-    signUpSchema,
-    signInSchema,
-    transactionSchema
-}
+  signUpSchema,
+  signInSchema,
+  transactionSchema,
+};
