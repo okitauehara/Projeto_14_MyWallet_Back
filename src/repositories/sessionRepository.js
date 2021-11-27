@@ -13,6 +13,7 @@ async function createSession({ user, token }) {
 
 async function findSessionByToken(token) {
   const result = await connection.query('SELECT * FROM sessions WHERE token = $1;', [token]);
+  if (result.rowCount === 0) return null;
   return result.rows[0];
 }
 
