@@ -14,7 +14,7 @@ const invalidFakeTransaction = {
   type: faker.lorem.text(),
 };
 
-const deleteRecords = async () => connection.query('DELETE FROM records');
+const deleteRecords = async () => connection.query('TRUNCATE records RESTART IDENTITY CASCADE');
 
 export {
   fakeTransaction,

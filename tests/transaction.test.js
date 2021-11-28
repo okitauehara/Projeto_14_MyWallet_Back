@@ -6,6 +6,7 @@ import * as U from './factories/user.factory.js';
 import * as T from './factories/transaction.factory.js';
 
 afterAll(async () => {
+  await T.deleteRecords();
   await U.deleteUserSessions();
   await U.deleteSessions();
   await U.deleteUsers();
@@ -52,6 +53,28 @@ describe('POST /transactions', () => {
 
   test('should return status 400 if the request did not passed the joi validation', async () => {
     const result = await supertest(app).post('/transactions').send(T.invalidFakeTransaction).set('Authorization', `Bearer ${U.fakeSession.token}`);
+    expect(result.status).toEqual(400);
+  });
+});
+
+describe('PUT /transactions', () => {
+  test('should return status 200 if the register was successfull created', async () => {
+    const result = await supertest(app).put('/transactions/1').send(T.fakeTransaction).set('Authorization', `Bearer ${U.fakeSession.token}`);
+    expect(result.status).toEqual(200);
+  });
+
+  test('should return status 401 if the request was missing token', async () => {
+    const result = await supertest(app).put('/transactions/1').send(T.fakeTransaction);
+    expect(result.status).toEqual(401);
+  });
+
+  test('should return status 404 if the request does not return any results', async () => {
+    const result = await supertest(app).put('/transactions/100').set('Authorization', `Bearer ${U.fakeSession.token}123`);
+    expect(result.status).toEqual(404);
+  });
+
+  test('should return status 400 if the request did not passed the joi validation', async () => {
+    const result = await supertest(app).put('/transactions/1').send(T.invalidFakeTransaction).set('Authorization', `Bearer ${U.fakeSession.token}`);
     expect(result.status).toEqual(400);
   });
 });

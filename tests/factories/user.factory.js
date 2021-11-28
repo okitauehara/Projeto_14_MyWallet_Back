@@ -45,11 +45,11 @@ const createFakeSession = async () => {
   connection.query('INSERT INTO sessions (user_id, token) VALUES ($1, $2);', [user.id, fakeSession.token]);
 };
 
-const deleteUserSessions = async () => connection.query('DELETE FROM users_records');
+const deleteUserSessions = async () => connection.query('TRUNCATE users_records RESTART IDENTITY CASCADE');
 
-const deleteUsers = async () => connection.query('DELETE FROM users;');
+const deleteUsers = async () => connection.query('TRUNCATE users RESTART IDENTITY CASCADE');
 
-const deleteSessions = async () => connection.query('DELETE FROM sessions;');
+const deleteSessions = async () => connection.query('TRUNCATE sessions RESTART IDENTITY CASCADE');
 
 export {
   fakeUserSignUp,
