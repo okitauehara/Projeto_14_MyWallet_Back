@@ -36,7 +36,7 @@ describe('GET /transactions', () => {
 });
 
 describe('POST /transactions', () => {
-  test('should return status 201 if the register was successfull created', async () => {
+  test('should return status 201 if the register was successfully created', async () => {
     const result = await supertest(app).post('/transactions').send(T.fakeTransaction).set('Authorization', `Bearer ${U.fakeSession.token}`);
     expect(result.status).toEqual(201);
   });
@@ -58,7 +58,7 @@ describe('POST /transactions', () => {
 });
 
 describe('PUT /transactions', () => {
-  test('should return status 200 if the register was successfull created', async () => {
+  test('should return status 200 if the register was successfully updated', async () => {
     const result = await supertest(app).put('/transactions/1').send(T.fakeTransaction).set('Authorization', `Bearer ${U.fakeSession.token}`);
     expect(result.status).toEqual(200);
   });
@@ -76,5 +76,22 @@ describe('PUT /transactions', () => {
   test('should return status 400 if the request did not passed the joi validation', async () => {
     const result = await supertest(app).put('/transactions/1').send(T.invalidFakeTransaction).set('Authorization', `Bearer ${U.fakeSession.token}`);
     expect(result.status).toEqual(400);
+  });
+});
+
+describe('DELETE /transactions', () => {
+  test('should return status 200 if the register was successfull created', async () => {
+    const result = await supertest(app).delete('/transactions/1').set('Authorization', `Bearer ${U.fakeSession.token}`);
+    expect(result.status).toEqual(200);
+  });
+
+  test('should return status 401 if the request was missing token', async () => {
+    const result = await supertest(app).delete('/transactions/1');
+    expect(result.status).toEqual(401);
+  });
+
+  test('should return status 404 if the request does not return any results', async () => {
+    const result = await supertest(app).delete('/transactions/100').set('Authorization', `Bearer ${U.fakeSession.token}123`);
+    expect(result.status).toEqual(404);
   });
 });
