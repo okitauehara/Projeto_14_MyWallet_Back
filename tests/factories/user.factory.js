@@ -30,7 +30,7 @@ const invalidFakeUserSignIn = {
 
 const fakeSession = {
   id: faker.datatype.number(),
-  users_id: fakeUserSignUp.id,
+  user_id: fakeUserSignUp.id,
   token: faker.datatype.uuid(),
 };
 
